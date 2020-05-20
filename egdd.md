@@ -62,7 +62,6 @@ This can be used as a classroom activity as a way to reinforce information.
 
 - Given an array of numbers, sort the array into ascending order. Show each step using a Bubble Sort.
 - Given an array of numbers, sort the array into ascending order. Show each step using a Selection Sort.
-- Given an array of numbers, sort the array into ascending order. Show each step using an Insertion Sort.
 
 # What sets this project apart?
 
@@ -100,14 +99,12 @@ how to write the code for them.
 - Each level will give the player a movement limiter. 
     - If the player exceeds this number of move it counts as a loss and the player has the option to try the level agian.
 - Each level will give the player a sorting algorithm they must use.
-    - The algorithms the game will use will be Bubble Sort, Selection Sort, and Insertion Sort.
+    - The algorithms the game will use will be Bubble Sort and Selection Sort.
 - When given a Bubble Sort, the player will only be allowed to drag and swap hats with the person immediatly next to them.
     - If the player chooses any other hat to swap with the hat will return to its original head.
 - When given a Selection Sort, the player can choose any head to swap hats with.
     - Only the hat the player drags and the hat it will be replacing will swap. All other hats will remain in place.
-- When given an insertion Sort, the player can choose any head to place the hat on.
-    - The hats will then move either left or right depending on where the original hat was dragged from.
-- The game will alternate between the three sorting algorithms, with each appearance of the individual sorting algorithms 
+- The game will alternate between the two sorting algorithms, with each appearance of the individual sorting algorithms 
 giving the player a smaller movement limit.
 
 # Objects/Entities
@@ -121,7 +118,7 @@ giving the player a smaller movement limit.
 ## Core Gameplay Mechanics (Detailed)
 
 - Moving the hat to a viable head: If the player drags a hat to a position that is allowed by the sorting algorithm,
-then the hats will move asshould be expected given the algorithm. The hats will swap if it is a Selection or Bubble sort, or the hats will move one head over if it is an Insertion sort.
+then the hats will move asshould be expected given the algorithm. The hats will swap if it is a Selection or Bubble sort.
 - Moving the hat to a non-viable head: If the player is given a Bubble Sort and tries to swap hats with a head that is not
 immediatly next to their current one, the hat will return back to its original head.
 - Completing the Sort: If the player is able to complete the sort correctly within the move limit, the game will progress to the next
