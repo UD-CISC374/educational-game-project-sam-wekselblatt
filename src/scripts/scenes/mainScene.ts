@@ -27,6 +27,7 @@ export default class MainScene extends Phaser.Scene {
   storeObj1;
   storeObj2;
   bubbleSort: boolean;
+  bubbleWorks: boolean;
 
   constructor() {
     super({ key: 'MainScene' });
@@ -34,6 +35,7 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
     this.bubbleSort = true;
+    this.bubbleWorks = false;
     this.overlap = false;
     this.stopDrag = true;
     this.posit = [110, 310, 510, 710, 910, 1110, 1310, 1510, 1710];
@@ -242,17 +244,17 @@ export default class MainScene extends Phaser.Scene {
 
   bubbls(obj1, obj2){
     for(let i=0; i<9; i++){
-      for(let j=0; j<9; j++){
-        if(this.hatOrder[i] == obj1.name && this.hatOrder[j] == obj2.name){
-          if((i+1 == j || i-1 == j)){
-            this.changePosit(obj1, obj2);
-          }
-          else{
-            obj1.x = this.storeX;
-            obj1.y = this.storeY;
-          }
-        }
+      if(this.hatOrder[i] == obj1.name && (this.hatOrder[i+1] == obj2.name || this.hatOrder[i-1] == obj2.name)){
+        this.bubbleWorks = true;
       }
+    }
+    if(this.bubbleWorks){
+      this.bubbleWorks = false;
+      this.changePosit(obj1, obj2);
+    }
+    else {
+      obj1.x = this.storeX;
+      obj1.y = this.storeY;
     }
   }
 
