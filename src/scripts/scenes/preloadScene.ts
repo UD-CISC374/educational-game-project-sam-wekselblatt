@@ -8,7 +8,14 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("happy_background", "assets/backgrounds/happy_faces.png");
     this.load.image("upset_background", "assets/backgrounds/upset_faces.png");
 
-    this.load.image("next_round", "assets/backgrounds/NextRound.png")
+    this.load.image("next_round", "assets/screens/continueScreen.png");
+    this.load.image("retry", "assets/screens/roundEnd.png");
+    this.load.image("opening", "assets/screens/openerScreen.png");
+    this.load.image("Bubble", "assets/objects/Bubble_Sort.png");
+    this.load.image("Selection", "assets/objects/Selection_Sort.png");
+    this.load.image("Clipboard", "assets/objects/clipboard.png");
+    this.load.image("continueButton", "assets/objects/continue_button.png");
+    this.load.image("ExitButton", "assets/objects/exit_button.png");
 
     this.load.image("redhat", "assets/hats/tophat_red.png");
     this.load.image("orangehat", "assets/hats/tophat_orange2.png");

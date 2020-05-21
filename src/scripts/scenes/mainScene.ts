@@ -32,7 +32,13 @@ export default class MainScene extends Phaser.Scene {
   round;
   limit;
   moveCount;
+  roundText;
+  limitText;
+  moveCountText;
   text;
+  Bsorter: Phaser.GameObjects.Image;
+  Ssorter: Phaser.GameObjects.Image;
+  Clipboard: Phaser.GameObjects.Image;
 
   constructor() {
     super({ key: 'MainScene' });
@@ -60,6 +66,29 @@ export default class MainScene extends Phaser.Scene {
     this.background.setOrigin(0, 0);
     this.background.displayWidth = this.scale.width;
     this.background.displayHeight = this.scale.height;
+
+
+
+    this.Bsorter = this.add.image(0, 0, "Bubble");
+    this.Bsorter.setOrigin(0, 0);
+    this.Bsorter.displayWidth = 300;
+    this.Bsorter.displayHeight = 300;
+    this.Bsorter.x = 100;
+    this.Bsorter.y = 50;
+
+    this.Ssorter = this.add.image(0, 0, "Selection");
+    this.Ssorter.setOrigin(0, 0);
+    this.Ssorter.displayWidth = 300;
+    this.Ssorter.displayHeight = 300;
+    this.Ssorter.x = 100;
+    this.Ssorter.y = 50;
+
+    this.Clipboard = this.add.image(0, 0, "Clipboard");
+    this.Clipboard.setOrigin(0, 0);
+    this.Clipboard.displayWidth = 300;
+    this.Clipboard.displayHeight = 400;
+    this.Clipboard.x = 1400;
+    
 
     this.redhat = this.physics.add.sprite(110, 620, "redhat");
     this.orangehat = this.physics.add.sprite(310, 620, "orangehat");
@@ -147,13 +176,20 @@ export default class MainScene extends Phaser.Scene {
 
     this.roundEnd = this.add.image(0, 0, "next_round");
     this.roundEnd.setOrigin(0, 0);
-    this.roundEnd.displayWidth = this.scale.width;
-    this.roundEnd.displayHeight = this.scale.height;
+    this.roundEnd.displayWidth = 1100;
+    this.roundEnd.displayHeight = 700;
+    this.roundEnd.x = 300;
+    this.roundEnd.y = 100;
     this.roundEnd.setVisible(false);
+
+    this.roundText = this.add.text(1450, 100, "Round 1", {fontSize: '40px', fill: '0#ffffff'});
+    this.limitText = this.add.text(1450, 200, "Limit: 15", {fontSize: '20px', fill: '0#ffffff'});
+    this.moveCountText = this.add.text(1450, 250, "Moves: 0", {fontSize: '20px', fill: '0#ffffff'});
+
 
     this.input.on('gameobjectdown', this.startdrag, this);
 
-    this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.reOrder());
+    //this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.reOrder());
     //this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.updater());
   }
 
@@ -277,6 +313,9 @@ export default class MainScene extends Phaser.Scene {
 
   createWindow(){
     this.roundEnd.setVisible(true);
+    this.Ssorter.setVisible(false);
+    this.Bsorter.setVisible(false);
+    this.Clipboard.setVisible(false);
     this.text = this.add.text(500, 600, "Next Round", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.nextGame());
   }
 
@@ -287,6 +326,8 @@ export default class MainScene extends Phaser.Scene {
     this.moveCount = 0;
     this.roundEnd.setVisible(false);
     this.text.setVisible(false);
+    this.Clipboard.setVisible(true);
+    this.Bsorter.setVisible(true);
   }
 
   update() {
