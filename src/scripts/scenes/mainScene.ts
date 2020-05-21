@@ -47,10 +47,10 @@ export default class MainScene extends Phaser.Scene {
   create() {
 
     this.limit = 10;
-    this.round;
+    this.round = 1;
     this.moveCount = 0;
 
-    this.bubbleSort = true;
+    this.bubbleSort = false;
     this.bubbleWorks = false;
     this.overlap = false;
     this.stopDrag = true;
@@ -75,6 +75,7 @@ export default class MainScene extends Phaser.Scene {
     this.Bsorter.displayHeight = 300;
     this.Bsorter.x = 100;
     this.Bsorter.y = 50;
+    this.Bsorter.setVisible(false);
 
     this.Ssorter = this.add.image(0, 0, "Selection");
     this.Ssorter.setOrigin(0, 0);
@@ -188,9 +189,20 @@ export default class MainScene extends Phaser.Scene {
 
 
     this.input.on('gameobjectdown', this.startdrag, this);
-
+    this.reOrder();
     //this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.reOrder());
     //this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.updater());
+  }
+  reOrder(){
+    Phaser.Utils.Array.Shuffle(this.hatOrder);
+    for(let i=0; i<9; i++){
+      for(let j=0; j<9; j++){
+        if(this.hats.getChildren()[i].name == this.hatOrder[j]){
+          this.hats.getChildren()[i].x = this.posit[j];
+        }
+      }
+    }
+
   }
 
   startdrag(pointer, gameObject) {
@@ -224,34 +236,13 @@ export default class MainScene extends Phaser.Scene {
     this.moveCount += 1;
   }
 
-  victoryCheck() {
-    let fail = false;
-    for(let i=0; i<9; i++){
-      if(this.hats.getChildren()[i].name !== this.hatOrder[i]){
-        fail = true;
-      }
-    }
-    if(!fail) {
-      console.log("victory");
-      this.createWindow();
-    }
-  }
+  
 
   /*updater() {
     this.background.setTexture("upset_background");
   }*/
 
-  reOrder(){
-    Phaser.Utils.Array.Shuffle(this.hatOrder);
-    for(let i=0; i<9; i++){
-      for(let j=0; j<9; j++){
-        if(this.hats.getChildren()[i].name == this.hatOrder[j]){
-          this.hats.getChildren()[i].x = this.posit[j];
-        }
-      }
-    }
-
-  }
+  
   checkOverlap(arr1, arr2) {
     var obj1;
     var obj2;
@@ -305,29 +296,66 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
+  
+
+  createWinWindow(){
+    this.background.setTexture("happy_background");
+    this.roundEnd.setVisible(true);
+
+    this.Ssorter.setVisible(false);
+    this.Bsorter.setVisible(false);
+    this.Clipboard.setVisible(false);
+    this.roundText.setVisible(false);
+    this.limitText.setVisible(false);
+    this.moveCountText.setVisible(false);
+
+    this.text = this.add.text(500, 600, "Next Round", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.nextGame());
+  }
+
+  createLoseWindow() {
+
+  }
+
+
+  createEndWindow(){
+  }
+
+
+  nextGame(){
+    this.background.setTexture("neutral_background");
+    this.round++;
+    this.moveCount = 0;
+    this.reOrder();
+    this.roundText.text = String("Round " + this.round);
+    this.roundEnd.setVisible(false);
+    this.text.setVisible(false);
+    this.Clipboard.setVisible(true);
+    this.roundText.setVisible(true);
+    this.limitText.setVisible(true);
+    this.moveCountText.setVisible(true);
+
+    this.Bsorter.setVisible(true);
+  }
+
+  victoryCheck() {
+    let fail = false;
+    for(let i=0; i<9; i++){
+      if(this.hats.getChildren()[i].name !== this.hatOrder[i]){
+        fail = true;
+      }
+    }
+    if(!fail && this.round !== 8) {
+      this.createWinWindow();
+    }
+    else if(!fail && this.round == 8){
+      this.createEndWindow();
+    }
+  }
+
   gameOver(){
     if(this.moveCount >= this.limit){
       console.log("Game Over");
     }
-  }
-
-  createWindow(){
-    this.roundEnd.setVisible(true);
-    this.Ssorter.setVisible(false);
-    this.Bsorter.setVisible(false);
-    this.Clipboard.setVisible(false);
-    this.text = this.add.text(500, 600, "Next Round", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.nextGame());
-  }
-
-  nextGame(){
-    this.reOrder();
-    this.round++;
-    this.limit++;
-    this.moveCount = 0;
-    this.roundEnd.setVisible(false);
-    this.text.setVisible(false);
-    this.Clipboard.setVisible(true);
-    this.Bsorter.setVisible(true);
   }
 
   update() {
