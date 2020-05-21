@@ -1,21 +1,21 @@
 {
-  "name": "educational-phaser-game-template",
+  "name": "educational-game-project-sam-wekselblatt",
   "version": "0.0.2",
-  "description": "Phaser 3 starter template for educational games, using TypeScript, webpack, and Github Pages.",
-  "homepage": "https://github.com/acbart/educational-phaser-game-template#readme",
+  "description": "A game where you sort hats into their correct color specific locations according to a given sorting algorithm.",
+  "homepage": "https://github.com/UD-CISC374/educational-game-project-sam-wekselblatt/blob/master/egdd.md",
   "main": "index.js",
   "game": {
-    "url": "educational-phaser-game-template",
-    "shortName": "EdGame",
-    "name": "Educational Phaser Game Template"
+    "url": "educational-game-project-sam-wekselblatt",
+    "shortName": "Sorting Hat",
+    "name": "Sorting Hat Educational Game"
   },
   "author": {
-    "name": "Austin Cory Bart",
-    "url": "https://github.com/acbart"
+    "name": "Sam Wekselblatt",
+    "url": "https://github.com/samwex98"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/acbart/educational-phaser-game-template.git"
+    "url": "https://github.com/UD-CISC374/educational-game-project-sam-wekselblatt.git"
   },
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.dev.js",
