@@ -3,6 +3,7 @@ import ExampleObject from '../objects/exampleObject';
 export default class MainScene extends Phaser.Scene {
   private exampleObject: ExampleObject;
   background: Phaser.GameObjects.Image;
+  roundEnd: Phaser.GameObjects.Image;
   redhat: Phaser.Physics.Arcade.Sprite;
   orangehat:Phaser.Physics.Arcade.Sprite;
   yellowhat: Phaser.Physics.Arcade.Sprite;
@@ -28,12 +29,21 @@ export default class MainScene extends Phaser.Scene {
   storeObj2;
   bubbleSort: boolean;
   bubbleWorks: boolean;
+  round;
+  limit;
+  moveCount;
+  text;
 
   constructor() {
     super({ key: 'MainScene' });
   }
 
   create() {
+
+    this.limit = 10;
+    this.round;
+    this.moveCount = 0;
+
     this.bubbleSort = true;
     this.bubbleWorks = false;
     this.overlap = false;
@@ -44,6 +54,7 @@ export default class MainScene extends Phaser.Scene {
     this.randomOrder = [];
 
     this.exampleObject = new ExampleObject(this, 0, 0);
+
 
     this.background = this.add.image(0, 0, "neutral_background");
     this.background.setOrigin(0, 0);
@@ -90,17 +101,6 @@ export default class MainScene extends Phaser.Scene {
     this.hatOrder.push("pink");
     this.hatOrder.push("white");
     
-/*
-    this.hatOrder.add(this.redhat);
-    this.hatOrder.add(this.orangehat);
-    this.hatOrder.add(this.yellowhat);
-    this.hatOrder.add(this.yellowgreenhat);
-    this.hatOrder.add(this.greenhat);
-    this.hatOrder.add(this.bluehat);
-    this.hatOrder.add(this.purplehat);
-    this.hatOrder.add(this.pinkhat);
-    this.hatOrder.add(this.whitehat);
-*/
     this.redhat.setGravityY(-400);
     this.orangehat.setGravityY(-400);
     this.yellowhat.setGravityY(-400);
@@ -141,6 +141,16 @@ export default class MainScene extends Phaser.Scene {
     this.pinkhat.setInteractive();
     this.whitehat.setInteractive();
 
+
+
+
+
+    this.roundEnd = this.add.image(0, 0, "next_round");
+    this.roundEnd.setOrigin(0, 0);
+    this.roundEnd.displayWidth = this.scale.width;
+    this.roundEnd.displayHeight = this.scale.height;
+    this.roundEnd.setVisible(false);
+
     this.input.on('gameobjectdown', this.startdrag, this);
 
     this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.reOrder());
@@ -175,7 +185,7 @@ export default class MainScene extends Phaser.Scene {
       this.storeObj1.y = this.storeY;
     }
     this.overlap = false;
-     
+    this.moveCount += 1;
   }
 
   victoryCheck() {
@@ -187,6 +197,7 @@ export default class MainScene extends Phaser.Scene {
     }
     if(!fail) {
       console.log("victory");
+      this.createWindow();
     }
   }
 
@@ -258,6 +269,26 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  update() {
+  gameOver(){
+    if(this.moveCount >= this.limit){
+      console.log("Game Over");
+    }
   }
+
+  createWindow(){
+    this.roundEnd.setVisible(true);
+    this.text = this.add.text(500, 600, "Next Round", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.nextGame());
+  }
+
+  nextGame(){
+    this.reOrder();
+    this.round++;
+    this.limit++;
+    this.moveCount = 0;
+    this.roundEnd.setVisible(false);
+    this.text.setVisible(false);
+  }
+
+  update() {
+  }  
 }
