@@ -26,12 +26,14 @@ export default class MainScene extends Phaser.Scene {
   overlap: boolean;
   storeObj1;
   storeObj2;
+  bubbleSort: boolean;
 
   constructor() {
     super({ key: 'MainScene' });
   }
 
   create() {
+    this.bubbleSort = true;
     this.overlap = false;
     this.stopDrag = true;
     this.posit = [110, 310, 510, 710, 910, 1110, 1310, 1510, 1710];
@@ -214,16 +216,44 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     }
-    if(this.overlap){
+    if(this.bubbleSort && this.overlap){
+      this.bubbls(this.storeObj1, this.storeObj2);
+    }
+    else if(!this.bubbleSort && this.overlap){
       this.changePosit(this.storeObj1, this.storeObj2);
     }
   }
 
   changePosit(obj1, obj2){
+    for(let i=0; i<9; i++){
+      if(this.hatOrder[i] === obj1.name){
+        this.hatOrder[i] = obj2.name;
+      }
+      else if(this.hatOrder[i] === obj2.name){
+        this.hatOrder[i] = obj1.name;
+      }
+    }
     obj1.x= obj2.x;
     obj1.y = obj2.y;
     obj2.x = this.storeX;
     obj2.y = this.storeY;
+    this.victoryCheck();
+  }
+
+  bubbls(obj1, obj2){
+    for(let i=0; i<9; i++){
+      for(let j=0; j<9; j++){
+        if(this.hatOrder[i] == obj1.name && this.hatOrder[j] == obj2.name){
+          if((i+1 == j || i-1 == j)){
+            this.changePosit(obj1, obj2);
+          }
+          else{
+            obj1.x = this.storeX;
+            obj1.y = this.storeY;
+          }
+        }
+      }
+    }
   }
 
   update() {
