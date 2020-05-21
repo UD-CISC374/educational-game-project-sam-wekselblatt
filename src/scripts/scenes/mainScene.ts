@@ -13,14 +13,21 @@ export default class MainScene extends Phaser.Scene {
   pinkhat: Phaser.Physics.Arcade.Sprite;
   whitehat: Phaser.Physics.Arcade.Sprite;
   hats;
-  hatOrder: [];
+  hatOrder;
+  randomOrder;
+  posit;
+  storeX: Number;
+  storeY: Number  ;
 
   constructor() {
     super({ key: 'MainScene' });
   }
 
   create() {
+    this.posit = [110, 310, 510, 710, 910, 1110, 1310, 1510, 1710];
     this.hats = this.add.group();
+    this.hatOrder = [];
+    this.randomOrder = [];
 
     this.exampleObject = new ExampleObject(this, 0, 0);
 
@@ -59,6 +66,27 @@ export default class MainScene extends Phaser.Scene {
     this.hats.add(this.pinkhat);
     this.hats.add(this.whitehat);
 
+    this.hatOrder.push("red");
+    this.hatOrder.push("orange");
+    this.hatOrder.push("yellow");
+    this.hatOrder.push("yellowgreen");
+    this.hatOrder.push("green");
+    this.hatOrder.push("blue");
+    this.hatOrder.push("purple");
+    this.hatOrder.push("pink");
+    this.hatOrder.push("white");
+    
+/*
+    this.hatOrder.add(this.redhat);
+    this.hatOrder.add(this.orangehat);
+    this.hatOrder.add(this.yellowhat);
+    this.hatOrder.add(this.yellowgreenhat);
+    this.hatOrder.add(this.greenhat);
+    this.hatOrder.add(this.bluehat);
+    this.hatOrder.add(this.purplehat);
+    this.hatOrder.add(this.pinkhat);
+    this.hatOrder.add(this.whitehat);
+*/
     this.redhat.setGravityY(-400);
     this.orangehat.setGravityY(-400);
     this.yellowhat.setGravityY(-400);
@@ -88,7 +116,32 @@ export default class MainScene extends Phaser.Scene {
     this.purplehat.flipX = true;
     this.pinkhat.flipX = true;
     this.whitehat.flipX = true;
-    
+   
+    this.reOrder();
+  }
+
+  victoryCheck() {
+    let fail = false;
+    for(let i=0; i<9; i++){
+      if(this.hats.getChildren()[i].name !== this.hatOrder[i]){
+        fail = true;
+      }
+    }
+    if(!fail) {
+      console.log("victory");
+    }
+  }
+
+  reOrder(){
+    Phaser.Utils.Array.Shuffle(this.hatOrder);
+    for(let i=0; i<9; i++){
+      for(let j=0; j<9; j++){
+        if(this.hats.getChildren()[i].name == this.hatOrder[j]){
+          this.hats.getChildren()[i].x = this.posit[j];
+        }
+      }
+    }
+
   }
 
   update() {
