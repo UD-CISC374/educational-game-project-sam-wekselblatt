@@ -17,13 +17,23 @@ export default class MainScene extends Phaser.Scene {
   randomOrder;
   posit;
   storeX: Number;
-  storeY: Number  ;
+  storeY: Number;
+  storeX2: Number;
+  storeY2: Number;
+  storeName: String;
+  dragObj: any;
+  stopDrag: boolean;
+  overlap: boolean;
+  storeObj1;
+  storeObj2;
 
   constructor() {
     super({ key: 'MainScene' });
   }
 
   create() {
+    this.overlap = false;
+    this.stopDrag = true;
     this.posit = [110, 310, 510, 710, 910, 1110, 1310, 1510, 1710];
     this.hats = this.add.group();
     this.hatOrder = [];
@@ -36,15 +46,15 @@ export default class MainScene extends Phaser.Scene {
     this.background.displayWidth = this.scale.width;
     this.background.displayHeight = this.scale.height;
 
-    this.redhat = this.physics.add.sprite(110, 610, "redhat");
-    this.orangehat = this.physics.add.sprite(310, 610, "orangehat");
-    this.yellowhat = this.physics.add.sprite(510, 610, "yellowhat");
-    this.yellowgreenhat = this.physics.add.sprite(710, 610, "yellowgreenhat");
-    this.greenhat = this.physics.add.sprite(910, 610, "greenhat");
-    this.bluehat = this.physics.add.sprite(1110, 610, "bluehat");
-    this.purplehat = this.physics.add.sprite(1310, 610, "purplehat");
-    this.pinkhat = this.physics.add.sprite(1510, 610, "pinkhat");
-    this.whitehat = this.physics.add.sprite(1710, 610, "whitehat");
+    this.redhat = this.physics.add.sprite(110, 620, "redhat");
+    this.orangehat = this.physics.add.sprite(310, 620, "orangehat");
+    this.yellowhat = this.physics.add.sprite(510, 620, "yellowhat");
+    this.yellowgreenhat = this.physics.add.sprite(710, 620, "yellowgreenhat");
+    this.greenhat = this.physics.add.sprite(910, 620, "greenhat");
+    this.bluehat = this.physics.add.sprite(1110, 620, "bluehat");
+    this.purplehat = this.physics.add.sprite(1310, 620, "purplehat");
+    this.pinkhat = this.physics.add.sprite(1510, 620, "pinkhat");
+    this.whitehat = this.physics.add.sprite(1710, 620, "whitehat");
 
     this.redhat.name = "red";
     this.orangehat.name = "orange";
@@ -97,15 +107,15 @@ export default class MainScene extends Phaser.Scene {
     this.pinkhat.setGravityY(-400);
     this.whitehat.setGravityY(-400);
 
-    this.redhat.setScale(0.4);
-    this.orangehat.setScale(0.4);
-    this.yellowhat.setScale(0.4);
-    this.yellowgreenhat.setScale(0.4);
-    this.greenhat.setScale(0.4);
-    this.bluehat.setScale(0.4);
-    this.purplehat.setScale(0.4);
-    this.pinkhat.setScale(0.4);
-    this.whitehat.setScale(0.4);
+    this.redhat.setScale(0.35);
+    this.orangehat.setScale(0.35);
+    this.yellowhat.setScale(0.35);
+    this.yellowgreenhat.setScale(0.35);
+    this.greenhat.setScale(0.35);
+    this.bluehat.setScale(0.35);
+    this.purplehat.setScale(0.35);
+    this.pinkhat.setScale(0.35);
+    this.whitehat.setScale(0.35);
 
     this.redhat.flipX = true;
     this.orangehat.flipX = true;
@@ -117,7 +127,51 @@ export default class MainScene extends Phaser.Scene {
     this.pinkhat.flipX = true;
     this.whitehat.flipX = true;
    
-    this.reOrder();
+    this.redhat.setInteractive();
+    this.orangehat.setInteractive();
+    this.yellowhat.setInteractive();
+    this.yellowgreenhat.setInteractive();
+    this.greenhat.setInteractive();
+    this.bluehat.setInteractive();
+    this.purplehat.setInteractive();
+    this.pinkhat.setInteractive();
+    this.whitehat.setInteractive();
+
+    this.input.on('gameobjectdown', this.startdrag, this);
+
+    this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.reOrder());
+    //this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.updater());
+  }
+
+  startdrag(pointer, gameObject) {
+    this.storeX = gameObject.x;
+    this.storeY = gameObject.y;
+    this.storeName = gameObject.name;
+    this.storeObj1 = gameObject;
+    this.stopDrag = false;
+    this.input.off('pointerdown', this.startdrag, this);
+    this.dragObj = gameObject;
+    this.input.on('pointermove', this.dodrag, this);
+    this.input.on('pointerup', this.stopdrag, this);
+  }
+
+  dodrag(pointer){
+    this.dragObj.x = pointer.x;
+    this.dragObj.y = pointer.y;
+  }
+
+  stopdrag(gameObject){
+    this.stopDrag = true;
+    this.input.on('pointerdown', this.startdrag, this);
+    this.input.off('pointermove', this.dodrag, this);
+    this.input.off('pointerup', this.stopdrag, this);
+    this.checkOverlap(this.hats, this.hats);
+    if(!this.overlap){
+      this.storeObj1.x = this.storeX;
+      this.storeObj1.y = this.storeY;
+    }
+    this.overlap = false;
+     
   }
 
   victoryCheck() {
@@ -132,6 +186,10 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
+  /*updater() {
+    this.background.setTexture("upset_background");
+  }*/
+
   reOrder(){
     Phaser.Utils.Array.Shuffle(this.hatOrder);
     for(let i=0; i<9; i++){
@@ -142,6 +200,30 @@ export default class MainScene extends Phaser.Scene {
       }
     }
 
+  }
+  checkOverlap(arr1, arr2) {
+    var obj1;
+    var obj2;
+    for(let i=0; i<9; i++){
+      for(let j=0; j<9; j++){
+        obj1 = arr1.getChildren()[i];
+        obj2 = arr2.getChildren()[j];
+        if(this.physics.overlap(obj1, obj2) && obj2.name !== this.storeName){
+          this.storeObj2 = obj2;
+          this.overlap = true;
+        }
+      }
+    }
+    if(this.overlap){
+      this.changePosit(this.storeObj1, this.storeObj2);
+    }
+  }
+
+  changePosit(obj1, obj2){
+    obj1.x= obj2.x;
+    obj1.y = obj2.y;
+    obj2.x = this.storeX;
+    obj2.y = this.storeY;
   }
 
   update() {

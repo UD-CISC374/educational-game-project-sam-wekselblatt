@@ -6,7 +6,7 @@ export default class PreloadScene extends Phaser.Scene {
   preload() {
     this.load.image("neutral_background", "assets/backgrounds/neutral_faces.png");
     this.load.image("happy_background", "assets/backgrounds/happy_faces.png");
-    this.load.image("upset_backgorund", "assets/backgrounds/upset_faces.png");
+    this.load.image("upset_background", "assets/backgrounds/upset_faces.png");
 
     this.load.image("redhat", "assets/hats/tophat_red.png");
     this.load.image("orangehat", "assets/hats/tophat_orange2.png");
