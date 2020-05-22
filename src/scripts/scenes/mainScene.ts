@@ -44,6 +44,9 @@ export default class MainScene extends Phaser.Scene {
   Continue: Phaser.GameObjects.Image;
   Exit: any;
   GameEnd: Phaser.GameObjects.Image;
+  music: Phaser.Sound.BaseSound;
+  musicConfig: { mute: boolean; volume: number; rate: number; detune: number; seek: number; loop: boolean; delay: number; };
+  endMusic: Phaser.Sound.BaseSound;
 
 
   constructor() {
@@ -74,7 +77,19 @@ export default class MainScene extends Phaser.Scene {
     this.background.displayWidth = this.scale.width;
     this.background.displayHeight = this.scale.height;
 
+    this.music = this.sound.add("LevelMusic");
+    this.endMusic = this.sound.add("GameEndMusic");
 
+    this.musicConfig = {
+      mute: false,
+      volume: 1,
+      rate: 1,
+      detune: 0,
+      seek: 0,
+      loop: true,
+      delay: 0
+    }
+    this.music.play(this.musicConfig);
 
     this.Bsorter = this.add.image(0, 0, "Bubble");
     this.Bsorter.setOrigin(0, 0);
@@ -220,7 +235,7 @@ export default class MainScene extends Phaser.Scene {
     this.Exit.displayHeight = 50;
     this.Exit.x = 1000;
     this.Exit.y = 720;
-    this.Exit.setInteractive().on('pointerdown', () => this.scene.start('PreloadScene'));
+    this.Exit.setInteractive().on('pointerdown', () => this.ender());
     this.Exit.setVisible(false);
 
     this.roundText = this.add.text(1450, 100, "Round 1", {fontSize: '40px', fill: '0#ffffff'});
@@ -385,6 +400,13 @@ export default class MainScene extends Phaser.Scene {
     this.whitehat.setVisible(false);
     this.background.setTexture("empty");
     this.GameEnd.setVisible(true);
+    this.music.stop();
+    this.endMusic.play(this.musicConfig);
+  }
+
+  ender() {
+    this.music.stop();
+    this.scene.start('PreloadScene');
   }
 
 

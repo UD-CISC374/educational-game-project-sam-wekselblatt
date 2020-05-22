@@ -2,6 +2,8 @@ export default class PreloadScene extends Phaser.Scene {
   background: Phaser.GameObjects.Image;
   open: Phaser.GameObjects.Image;
   playButton: Phaser.GameObjects.Image;
+  music: Phaser.Sound.BaseSound;
+
   constructor() {
     super({ key: 'PreloadScene' });
   }
@@ -33,6 +35,11 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("purplehat", "assets/hats/tophat_purple.png");
     this.load.image("pinkhat", "assets/hats/tophat_pink.png");
     this.load.image("whitehat", "assets/hats/tophat_white.png");
+
+    this.load.audio("TitleMusic", "assets/sounds/titleMusic.mp3");
+    this.load.audio("LevelMusic", "assets/sounds/levelMusic.mp3");
+    this.load.audio("GameEndMusic", "assets/sounds/gameEndMusic.mp3");
+
   }
 
   create() {
@@ -43,6 +50,20 @@ export default class PreloadScene extends Phaser.Scene {
     this.background.x += 50;
     this.background.y += 50;
     this.add.text(800, 500, "Start Game!", {fontSize: '30px', fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.opener());
+ 
+    this.music = this.sound.add("TitleMusic");
+
+    var musicConfig = {
+      mute: false,
+      volume: 1,
+      rate: 1,
+      detune: 0,
+      seek: 0,
+      loop: true,
+      delay: 0
+    }
+    this.music.play(musicConfig);
+
   }
 
   opener(){
@@ -60,7 +81,12 @@ export default class PreloadScene extends Phaser.Scene {
     this.playButton.displayWidth = 50;
     this.playButton.x = 870;
     this.playButton.y = 700;
-    this.playButton.setInteractive().on('pointerdown', () => this.scene.start('MainScene'));
+    this.playButton.setInteractive().on('pointerdown', () => this.ender());
+  }
+
+  ender() {
+    this.music.stop();
+    this.scene.start('MainScene');
   }
 
 }
