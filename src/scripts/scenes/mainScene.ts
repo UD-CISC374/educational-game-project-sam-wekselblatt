@@ -35,10 +35,16 @@ export default class MainScene extends Phaser.Scene {
   roundText;
   limitText;
   moveCountText;
-  text;
   Bsorter: Phaser.GameObjects.Image;
   Ssorter: Phaser.GameObjects.Image;
   Clipboard: Phaser.GameObjects.Image;
+  retry: Phaser.GameObjects.Image;
+  //retryText: Phaser.GameObjects.Text;
+  nextText: Phaser.GameObjects.Text;
+  exitText: Phaser.GameObjects.Text;
+  Continue: Phaser.GameObjects.Image;
+  Exit: any;
+
 
   constructor() {
     super({ key: 'MainScene' });
@@ -46,7 +52,8 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
 
-    this.limit = 10;
+
+    this.limit = 15;
     this.round = 1;
     this.moveCount = 0;
 
@@ -89,6 +96,7 @@ export default class MainScene extends Phaser.Scene {
     this.Clipboard.displayWidth = 300;
     this.Clipboard.displayHeight = 400;
     this.Clipboard.x = 1400;
+
     
 
     this.redhat = this.physics.add.sprite(110, 620, "redhat");
@@ -183,6 +191,32 @@ export default class MainScene extends Phaser.Scene {
     this.roundEnd.y = 100;
     this.roundEnd.setVisible(false);
 
+    this.retry = this.add.image(0, 0, "retry");
+    this.retry.setOrigin(0, 0);
+    this.retry.displayWidth = 1100;
+    this.retry.displayHeight = 700;
+    this.retry.x = 300;
+    this.retry.y = 100;
+    this.retry.setVisible(false);
+
+    this.Continue = this.add.image(0, 0, "continueButton");
+    this.Continue.setOrigin(0, 0);
+    this.Continue.displayWidth = 50;
+    this.Continue.displayHeight = 50;
+    this.Continue.x = 750;
+    this.Continue.y = 720;
+    this.Continue.setInteractive().on('pointerdown', () => this.nextGame());
+    this.Continue.setVisible(false);
+
+    this.Exit = this.add.image(0, 0, "ExitButton");
+    this.Exit.setOrigin(0, 0);
+    this.Exit.displayWidth = 50;
+    this.Exit.displayHeight = 50;
+    this.Exit.x = 1000;
+    this.Exit.y = 720;
+    this.Exit.setInteractive().on('pointerdown', () => this.scene.start('PreloadScene'));
+    this.Exit.setVisible(false);
+
     this.roundText = this.add.text(1450, 100, "Round 1", {fontSize: '40px', fill: '0#ffffff'});
     this.limitText = this.add.text(1450, 200, "Limit: 15", {fontSize: '20px', fill: '0#ffffff'});
     this.moveCountText = this.add.text(1450, 250, "Moves: 0", {fontSize: '20px', fill: '0#ffffff'});
@@ -190,9 +224,8 @@ export default class MainScene extends Phaser.Scene {
 
     this.input.on('gameobjectdown', this.startdrag, this);
     this.reOrder();
-    //this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.reOrder());
-    //this.add.text(60, 200, "Start Game!", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.updater());
   }
+
   reOrder(){
     Phaser.Utils.Array.Shuffle(this.hatOrder);
     for(let i=0; i<9; i++){
@@ -234,6 +267,7 @@ export default class MainScene extends Phaser.Scene {
     }
     this.overlap = false;
     this.moveCount += 1;
+    this.gameOver();
   }
 
   
@@ -308,33 +342,61 @@ export default class MainScene extends Phaser.Scene {
     this.roundText.setVisible(false);
     this.limitText.setVisible(false);
     this.moveCountText.setVisible(false);
-
-    this.text = this.add.text(500, 600, "Next Round", {fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.nextGame());
+    this.Continue.setVisible(true);
+    this.Continue.x = 820;
+    this.Continue.y = 670;
+    this.round++;
+    
   }
 
   createLoseWindow() {
+    this.background.setTexture("upset_background");
+    this.retry.setVisible(true);
 
+    this.Ssorter.setVisible(false);
+    this.Bsorter.setVisible(false);
+    this.Clipboard.setVisible(false);
+    this.roundText.setVisible(false);
+    this.limitText.setVisible(false);
+    this.moveCountText.setVisible(false);
+    this.Continue.setVisible(true);
+    this.Exit.setVisible(true);
+    
+   
   }
 
 
   createEndWindow(){
+    console.log("Game Has Ended")
   }
 
 
   nextGame(){
     this.background.setTexture("neutral_background");
-    this.round++;
     this.moveCount = 0;
     this.reOrder();
     this.roundText.text = String("Round " + this.round);
+
+    if(this.round %2 == 0){
+      this.Bsorter.setVisible(true);
+      this.bubbleSort = true;
+      this.limit = 36 - this.round;
+    }
+    else{
+      this.Ssorter.setVisible(true);
+      this.bubbleSort = false;
+      this.limit = 16 - this.round;
+    }
     this.roundEnd.setVisible(false);
-    this.text.setVisible(false);
+    this.retry.setVisible(false);
+    //this.retryText.setVisible(false);
+    this.Continue.setVisible(false);
+    this.Exit.setVisible(false);
     this.Clipboard.setVisible(true);
     this.roundText.setVisible(true);
     this.limitText.setVisible(true);
     this.moveCountText.setVisible(true);
-
-    this.Bsorter.setVisible(true);
+    this.limitText.text = String("Limit: " + this.limit);
   }
 
   victoryCheck() {
@@ -354,10 +416,11 @@ export default class MainScene extends Phaser.Scene {
 
   gameOver(){
     if(this.moveCount >= this.limit){
-      console.log("Game Over");
+      this.createLoseWindow();
     }
   }
 
   update() {
+    this.moveCountText.text = String("Moves: " + this.moveCount);
   }  
 }
