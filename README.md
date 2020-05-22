@@ -1,32 +1,18 @@
-# educational-phaser-game-template
+# The Sorting Hat
+## What's Happening?
+There's been a terrible mixup at the local hat factory and a bunch of customers have gotten the wrong hats! 
+As the manager of this factory, it's up to you to sort this out and make sure each customer has the right hat.
+You'll have to follow company guidelines and sort the hats into order using the specified sorting algorithm.
+Make sure you work well, if you move around too many hats without getting the order right the customers will leave upset.
 
-Template for designing educational Phaser Games
+## How to Play
+The way you play is by dragging hats around to the different customers in line. 
+Each time you move a hat your movement counter increases. If you make too many moves without getting the order right,
+the round will end and the customers will leave unhappy.
+After each round, your move limit will decrease.
+Complete each round by sorting the hats. Complete 12 rounds to beat the game.
 
-# Important Files
-
-These files are for coding your game:
-
-* [src/scripts/game.ts](src/scripts/game.ts): The starting file of your game.
-
-These files are for documenting your game:
- 
-* [egdd.md](egdd.md): The educational game design document describing this game in more depth.
-
-These [package.json](package.json) settings are for configuring the metadata of your game and should be updated:
-
-* `name`: This must be a lower-case version of your repository name on GitHub, without spaces.
-* `description`: Give a quick, one sentence summary of your game.
-* `game`:
-    * `url`: Change this to be the EXACT name of your repository on GitHub.
-    * `shortName`: Choose a short name for your game for [Progressive Web App](https://medium.com/@amberleyjohanna/seriously-though-what-is-a-progressive-web-app-56130600a093) packaging.
-    * `name`: Choose a longer, complete name for your game.
-* `repository`:
-    * `url`: Change this URL to be a link to your GitHub repository.
-* `homepage`: Change this URL to be a link to the final version of your game's EGDD.
-* `contributors`: This should be an array (list) of strings, where each string is like `"Barney Rubble <b@rubble.com> (http://barnyrubble.tumblr.com/)"`.
-
-You should edit the following images to create icons for your game, if it gets installed as a [Progressive Web App](https://medium.com/@amberleyjohanna/seriously-though-what-is-a-progressive-web-app-56130600a093):
-
-* [src/assets/icons/icons-192.png](src/assets/icons/icons-192.png): This is a 192x192 pixel version of your game's icon.
-* [src/assets/icons/icons-512.png](src/assets/icons/icons-512.png): This is a 512x512 pixel version of your game's icon.
-* [src/assets/icons/favicon.ico](src/assets/icons/favicon.ico): The [Favicon](https://en.wikipedia.org/wiki/Favicon) for your game.
+## Learning Goals
+Help students understand sorting algorithms by providing a hands-on experience in the sorting process.
+This game functions as its own teaching tool, as well as a supplemental tool to help reinforce
+lessons students have learned in regards to sorting algorithms.
