@@ -47,6 +47,7 @@ export default class MainScene extends Phaser.Scene {
   music: Phaser.Sound.BaseSound;
   musicConfig: { mute: boolean; volume: number; rate: number; detune: number; seek: number; loop: boolean; delay: number; };
   endMusic: Phaser.Sound.BaseSound;
+  grabSound: Phaser.Sound.BaseSound;
 
 
   constructor() {
@@ -79,6 +80,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.music = this.sound.add("LevelMusic");
     this.endMusic = this.sound.add("GameEndMusic");
+    this.grabSound = this.sound.add("Grab");
 
     this.musicConfig = {
       mute: false,
@@ -242,9 +244,9 @@ export default class MainScene extends Phaser.Scene {
     this.limitText = this.add.text(1450, 200, "Limit: 15", {fontSize: '20px', fill: '0#ffffff'});
     this.moveCountText = this.add.text(1450, 250, "Moves: 0", {fontSize: '20px', fill: '0#ffffff'});
 
-
-    this.input.on('gameobjectdown', this.startdrag, this);
     this.reOrder();
+    this.input.on('gameobjectdown', this.startdrag, this);
+    
   }
 
   reOrder(){
@@ -260,6 +262,13 @@ export default class MainScene extends Phaser.Scene {
   }
 
   startdrag(pointer, gameObject) {
+    for(let i=0; i<9; i++){
+      if(gameObject.name == this.hatOrder[i]){
+        this.grabSound.play();
+        this.moveCount++;
+      }
+    }
+
     this.storeX = gameObject.x;
     this.storeY = gameObject.y;
     this.storeName = gameObject.name;
@@ -287,7 +296,6 @@ export default class MainScene extends Phaser.Scene {
       this.storeObj1.y = this.storeY;
     }
     this.overlap = false;
-    this.moveCount++;
     this.gameOver();
   }
 
