@@ -39,11 +39,11 @@ export default class MainScene extends Phaser.Scene {
   Ssorter: Phaser.GameObjects.Image;
   Clipboard: Phaser.GameObjects.Image;
   retry: Phaser.GameObjects.Image;
-  //retryText: Phaser.GameObjects.Text;
   nextText: Phaser.GameObjects.Text;
   exitText: Phaser.GameObjects.Text;
   Continue: Phaser.GameObjects.Image;
   Exit: any;
+  GameEnd: Phaser.GameObjects.Image;
 
 
   constructor() {
@@ -181,7 +181,13 @@ export default class MainScene extends Phaser.Scene {
 
 
 
-
+    this.GameEnd = this.add.image(0, 0, "EndTophat");
+    this.GameEnd.setOrigin(0, 0);
+    this.GameEnd.displayWidth = 600;
+    this.GameEnd.displayHeight = 600;
+    this.GameEnd.x = 550;
+    this.GameEnd.y = 200;
+    this.GameEnd.setVisible(false);
 
     this.roundEnd = this.add.image(0, 0, "next_round");
     this.roundEnd.setOrigin(0, 0);
@@ -266,15 +272,9 @@ export default class MainScene extends Phaser.Scene {
       this.storeObj1.y = this.storeY;
     }
     this.overlap = false;
-    this.moveCount += 1;
+    this.moveCount++;
     this.gameOver();
   }
-
-  
-
-  /*updater() {
-    this.background.setTexture("upset_background");
-  }*/
 
   
   checkOverlap(arr1, arr2) {
@@ -361,13 +361,30 @@ export default class MainScene extends Phaser.Scene {
     this.moveCountText.setVisible(false);
     this.Continue.setVisible(true);
     this.Exit.setVisible(true);
+    this.Continue.x = 750;
+    this.Continue.y = 720;
     
    
   }
 
-
   createEndWindow(){
-    console.log("Game Has Ended")
+    this.Ssorter.setVisible(false);
+    this.Bsorter.setVisible(false);
+    this.Clipboard.setVisible(false);
+    this.roundText.setVisible(false);
+    this.limitText.setVisible(false);
+    this.moveCountText.setVisible(false);
+    this.redhat.setVisible(false);
+    this.orangehat.setVisible(false);
+    this.yellowhat.setVisible(false);
+    this.yellowgreenhat.setVisible(false);
+    this.greenhat.setVisible(false);
+    this.bluehat.setVisible(false);
+    this.purplehat.setVisible(false);
+    this.pinkhat.setVisible(false);
+    this.whitehat.setVisible(false);
+    this.background.setTexture("empty");
+    this.GameEnd.setVisible(true);
   }
 
 
@@ -380,16 +397,15 @@ export default class MainScene extends Phaser.Scene {
     if(this.round %2 == 0){
       this.Bsorter.setVisible(true);
       this.bubbleSort = true;
-      this.limit = 36 - this.round;
+      this.limit = 40 - this.round;
     }
     else{
       this.Ssorter.setVisible(true);
       this.bubbleSort = false;
-      this.limit = 16 - this.round;
+      this.limit = 20 - this.round;
     }
     this.roundEnd.setVisible(false);
     this.retry.setVisible(false);
-    //this.retryText.setVisible(false);
     this.Continue.setVisible(false);
     this.Exit.setVisible(false);
     this.Clipboard.setVisible(true);
@@ -406,10 +422,10 @@ export default class MainScene extends Phaser.Scene {
         fail = true;
       }
     }
-    if(!fail && this.round !== 8) {
+    if(!fail && this.round !== 12) {
       this.createWinWindow();
     }
-    else if(!fail && this.round == 8){
+    else if(!fail && this.round == 12){
       this.createEndWindow();
     }
   }

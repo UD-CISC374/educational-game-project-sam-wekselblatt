@@ -1,6 +1,7 @@
 export default class PreloadScene extends Phaser.Scene {
   background: Phaser.GameObjects.Image;
   open: Phaser.GameObjects.Image;
+  playButton: Phaser.GameObjects.Image;
   constructor() {
     super({ key: 'PreloadScene' });
   }
@@ -20,6 +21,8 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("Clipboard", "assets/objects/clipboard.png");
     this.load.image("continueButton", "assets/objects/continue_button.png");
     this.load.image("ExitButton", "assets/objects/exit_button.png");
+    this.load.image("EndTophat", "assets/hats/congrats.png");
+    this.load.image("Congrats", "assets/objects/congratulationsText.png");
 
     this.load.image("redhat", "assets/hats/tophat_red.png");
     this.load.image("orangehat", "assets/hats/tophat_orange2.png");
@@ -51,7 +54,13 @@ export default class PreloadScene extends Phaser.Scene {
     this.open = this.add.image(0, 0,"opening");
     this.open.x = 900;
     this.open.y = 450;
-    this.add.text(850, 700, "Play", {fontSize: '30px', fill: '0#ffffff'}).setInteractive().on('pointerdown', () => this.scene.start('MainScene'));
+    this.playButton = this.add.image(0, 0, "continueButton");
+    this.playButton.setOrigin(0, 0);
+    this.playButton.displayHeight = 50;
+    this.playButton.displayWidth = 50;
+    this.playButton.x = 870;
+    this.playButton.y = 700;
+    this.playButton.setInteractive().on('pointerdown', () => this.scene.start('MainScene'));
   }
 
 }
